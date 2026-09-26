@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI智能体驱动的基层红色遗址保护平台</title>
+  <style>
+    body { margin: 0; font-family: "Microsoft YaHei", sans-serif; background: #f4f7f5; color: #17352a; }
+    main { min-height: 100vh; display: grid; place-content: center; text-align: center; padding: 24px; }
+    h1 { font-size: 24px; margin: 0 0 12px; }
+    p { margin: 0; color: #526d62; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>AI智能体驱动的基层红色遗址保护平台</h1>
+    <p id="status">正在初始化公网演示环境...</p>
+  </main>
+  <script>
+    (async function () {
+      const status = document.getElementById("status");
+      if (!("serviceWorker" in navigator)) {
+        status.textContent = "当前浏览器不支持公网演示运行组件，请使用最新版 Edge 或 Chrome。";
+        return;
+      }
+      try {
+        await navigator.serviceWorker.register("./sw.js", { scope: "./" });
+        const registration = await navigator.serviceWorker.ready;
+        if (!navigator.serviceWorker.controller) {
+          await registration.update();
+          location.reload();
+          return;
+        }
+        location.replace("./01_平台前端/index.html");
+      } catch (error) {
+        status.textContent = "公网演示环境初始化失败：" + error.message;
+      }
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,1316 @@
+{
+  "system_status": {
+    "ok": true,
+    "data": {
+      "service": "AI智能体驱动的基层红色遗址保护平台",
+      "version": "V2.0",
+      "status": "online",
+      "server_time": "2026-09-26T08:42:59+00:00",
+      "database": {
+        "ready": true,
+        "storage": "SQLite",
+        "archive_count": 3,
+        "review_count": 3,
+        "agent_run_count": 0
+      },
+      "agent_pipeline": {
+        "total_runs": 0,
+        "online_model_runs": 0,
+        "offline_template_runs": 0,
+        "online_evidence_rate": 0.0,
+        "average_latency_ms": 0.0,
+        "average_audit_score": 0.0,
+        "average_citation_count": 0.0,
+        "pipeline_version": "2.0"
+      },
+      "model_service": {
+        "configured": false,
+        "generation_mode": "offline_template",
+        "disclosure": "未配置大语言模型；当前提供规则智能体规划、关键词检索和明确标注的离线模板初稿，不冒充真实大模型生成。",
+        "provider": "",
+        "model": "",
+        "self_test_endpoint": "/api/ai/self-test",
+        "server_side_key": false
+      },
+      "ai_capability": {
+        "generation_mode": "offline_template",
+        "model_configured": false,
+        "provider": "",
+        "model": "",
+        "self_test_endpoint": "/api/ai/self-test",
+        "agent_run_endpoint": "/api/agent/run",
+        "agent_metrics_endpoint": "/api/agent/metrics",
+        "agent_count": 7,
+        "pipeline_version": "2.0",
+        "planning_scope": "multi_agent_pipeline",
+        "retrieval_scope": "citation_bound_keyword_rag",
+        "disclosure": "未配置大语言模型；当前提供规则智能体规划、关键词检索和明确标注的离线模板初稿，不冒充真实大模型生成。"
+      },
+      "public_url": "",
+      "auth_enabled": false,
+      "cases": [
+        {
+          "name": "烈石山工事遗址",
+          "type": "工事遗址",
+          "focus": "战壕走向、构筑边界、地形高差和遗存完整性",
+          "model_mode": "概念演示模型",
+          "data_disclaimer": "依据影像资料进行解释性建模，非摄影测量成果，不可用于测绘量测。",
+          "glb_size": "1,637,664 字节",
+          "triangles": 13618,
+          "position_count": 40854
+        },
+        {
+          "name": "勍香镇红色标语墙遗址",
+          "type": "标语墙遗存",
+          "focus": "墙面纹理、文字边缘、结构裂隙和周边环境",
+          "model_mode": "概念演示模型",
+          "data_disclaimer": "现场位置与尺度尚未确认，模型不是实测复原，不可用于测绘量测。",
+          "glb_size": "2,615,324 字节",
+          "triangles": 36266,
+          "position_count": 108798
+        },
+        {
+          "name": "狼峪草帽山遗址",
+          "type": "山地遗址",
+          "focus": "大范围地形、植被遮挡、路径关系和重点遗存边界",
+          "model_mode": "概念演示模型",
+          "data_disclaimer": "工事位置、主体尺度与地形为展示假设，未完成现场测绘，不可用于量测。",
+          "glb_size": "17,004,772 字节",
+          "triangles": 127438,
+          "position_count": 382314
+        }
+      ],
+      "showcase_matrix": {
+        "case_count": 6,
+        "site_cases": 3,
+        "business_cases": 3,
+        "verification_endpoint": "/api/showcase/verify"
+      }
+    }
+  },
+  "ai_status": {
+    "ok": true,
+    "data": {
+      "generation_mode": "offline_template",
+      "model_configured": false,
+      "provider": "",
+      "model": "",
+      "self_test_endpoint": "/api/ai/self-test",
+      "agent_run_endpoint": "/api/agent/run",
+      "agent_metrics_endpoint": "/api/agent/metrics",
+      "agent_count": 7,
+      "pipeline_version": "2.0",
+      "planning_scope": "multi_agent_pipeline",
+      "retrieval_scope": "citation_bound_keyword_rag",
+      "disclosure": "未配置大语言模型；当前提供规则智能体规划、关键词检索和明确标注的离线模板初稿，不冒充真实大模型生成。"
+    }
+  },
+  "manifest": {
+    "ok": true,
+    "data": {
+      "name": "HeritageMultiAgentWorkflow",
+      "version": "2.0",
+      "agents": [
+        {
+          "id": "intake_guard",
+          "name": "输入与风险守卫",
+          "role": "Guard Agent",
+          "capability": "输入长度、提示注入、敏感指令和任务边界检查",
+          "output": "受控任务单"
+        },
+        {
+          "id": "retrieval_agent",
+          "name": "知识检索智能体",
+          "role": "Retriever Agent",
+          "capability": "知识条目召回、相关性排序、引用编号和来源绑定",
+          "output": "带编号的检索证据包"
+        },
+        {
+          "id": "planner_agent",
+          "name": "采集规划智能体",
+          "role": "Planner Agent",
+          "capability": "按遗址类型生成采集、质检、建模、审核和发布步骤",
+          "output": "结构化任务计划"
+        },
+        {
+          "id": "generation_agent",
+          "name": "AIGC讲解智能体",
+          "role": "Writer Agent",
+          "capability": "受控检索增强生成，未配置模型时明确降级为模板",
+          "output": "带引用和待审核标记的初稿"
+        },
+        {
+          "id": "audit_agent",
+          "name": "证据审计智能体",
+          "role": "Auditor Agent",
+          "capability": "引用覆盖、事实风险、免责声明、长度和提示注入复核",
+          "output": "质量门禁与风险标记"
+        },
+        {
+          "id": "correction_agent",
+          "name": "纠错重写智能体",
+          "role": "Repair Agent",
+          "capability": "拦截无依据历史表述，生成引用完整的安全初稿并二次审计",
+          "output": "纠错后安全初稿"
+        },
+        {
+          "id": "human_review_gate",
+          "name": "人工复核关卡",
+          "role": "Human-in-the-loop",
+          "capability": "专家、属地管理单位和项目负责人共同确认",
+          "output": "待人工审核状态"
+        }
+      ],
+      "safety": {
+        "human_in_the_loop": true,
+        "prompt_injection_guard": true,
+        "citation_binding": true,
+        "online_offline_disclosure": true,
+        "evidence_hash_chain": true
+      }
+    }
+  },
+  "metrics": {
+    "ok": true,
+    "data": {
+      "total_runs": 0,
+      "online_model_runs": 0,
+      "offline_template_runs": 0,
+      "online_evidence_rate": 0.0,
+      "average_latency_ms": 0.0,
+      "average_audit_score": 0.0,
+      "average_citation_count": 0.0,
+      "pipeline_version": "2.0"
+    }
+  },
+  "cases": {
+    "ok": true,
+    "data": {
+      "generated_at": "2026-09-26",
+      "cases": [
+        {
+          "id": "SITE-01",
+          "group": "site",
+          "type_label": "工事遗址",
+          "title": "烈石山工事遗址三维实例",
+          "site_key": "lie-shishan",
+          "status": "verified",
+          "status_label": "演示验收通过",
+          "summary": "以工事走向、构筑边界和地形关系组织概念场景，支持浏览器旋转、缩放、复位与成果导出。",
+          "input": "内嵌 GLB 概念模型、预览图和遗址关注点说明",
+          "ai_steps": [
+            "三维场景加载",
+            "结构图层与视角控制",
+            "PNG/GLB 成果导出"
+          ],
+          "output": "可交互三维页面、预览图与 GLB 文件",
+          "review": {
+            "record_id": "HR-ARCH-01",
+            "reviewer": "演示审核人",
+            "decision": "演示通过",
+            "detail": "来源已登记，同意作为界面审核流程演示；正式测绘和史实发布前需再次复核。",
+            "reviewed_at": "2026-09-26"
+          },
+          "evidence_refs": [
+            "02_三维案例源码/烈石山工事遗址.html",
+            "01_平台前端/assets/lie-shishan-preview.png",
+            "内嵌 GLB 1,637,664 字节",
+            "13,618 三角面"
+          ],
+          "target": {
+            "kind": "url",
+            "label": "打开三维场景",
+            "value": "../02_三维案例源码/烈石山工事遗址.html"
+          },
+          "integrity_sha256": "F8010C94401EA3628042AD6C9DFC8EF31D9D1F542F6820D7276B92E291CE1558"
+        },
+        {
+          "id": "SITE-02",
+          "group": "site",
+          "type_label": "标语墙遗址",
+          "title": "勍香镇红色标语墙三维实例",
+          "site_key": "qingxiang-wall",
+          "status": "verified",
+          "status_label": "演示验收通过",
+          "summary": "用于墙面纹理、文字边缘与结构裂隙的概念浏览，现场位置和尺度尚未确认。",
+          "input": "标语墙概念模型、正视预览图和病害观察模板",
+          "ai_steps": [
+            "纹理近景浏览",
+            "剖面与视角复位",
+            "截图/模型导出"
+          ],
+          "output": "标语墙三维页面、病害标注入口和导出数据",
+          "review": {
+            "record_id": "HR-ARCH-02",
+            "reviewer": "演示审核人",
+            "decision": "退回修改",
+            "detail": "请补充现场来源、拍摄时间和病害位置后再复核，当前不以模型尺寸作结论。",
+            "reviewed_at": "2026-09-26"
+          },
+          "evidence_refs": [
+            "02_三维案例源码/勍香镇红色标语墙遗址.html",
+            "01_平台前端/assets/qingxiang-slogan-wall-preview.png",
+            "内嵌 GLB 2,615,324 字节",
+            "36,266 三角面"
+          ],
+          "target": {
+            "kind": "url",
+            "label": "打开三维场景",
+            "value": "../02_三维案例源码/勍香镇红色标语墙遗址.html"
+          },
+          "integrity_sha256": "116FC224E5C93E86BB2E633A4B2BF2FB5B47D60603DDE08743ED3B3CFCB0FA47"
+        },
+        {
+          "id": "SITE-03",
+          "group": "site",
+          "type_label": "山地遗址",
+          "title": "狼峪草帽山遗址三维实例",
+          "site_key": "langyu-caomaoshan",
+          "status": "verified",
+          "status_label": "演示验收通过",
+          "summary": "展示山地范围、植被遮挡、路径关系和重点遗存边界的概念空间关系。",
+          "input": "山地概念模型、地形展示假设和路径观察模板",
+          "ai_steps": [
+            "大范围地形浏览",
+            "植被与路径图层",
+            "自动旋转与导出"
+          ],
+          "output": "山地三维页面、模型指标和采集计划入口",
+          "review": {
+            "record_id": "HR-ARCH-03",
+            "reviewer": "演示审核人",
+            "decision": "演示通过",
+            "detail": "概念模型和采集计划已登记，同意作为界面与流程演示；地形尺度不得作为测量依据。",
+            "reviewed_at": "2026-09-26"
+          },
+          "evidence_refs": [
+            "02_三维案例源码/狼峪草帽山遗址.html",
+            "01_平台前端/assets/langyu-caomaoshan-preview.png",
+            "内嵌 GLB 17,004,772 字节",
+            "127,438 三角面"
+          ],
+          "target": {
+            "kind": "url",
+            "label": "打开三维场景",
+            "value": "../02_三维案例源码/狼峪草帽山遗址.html"
+          },
+          "integrity_sha256": "824AE95E0DD6AFAE398393A7BDCF39E0655356F466C013B2DE4CED725005704E"
+        },
+        {
+          "id": "AIGC-01",
+          "group": "business",
+          "type_label": "AIGC 生成",
+          "title": "讲解初稿生成与证据审计",
+          "site_key": "lie-shishan",
+          "status": "verified",
+          "status_label": "真实模型已运行",
+          "summary": "根据受控知识条目生成讲解初稿，真实模型初审89分后纠错重写，终审100分并进入人工签批。",
+          "input": "遗址类型、采集重点、KB-01/KB-02/KB-03 知识条目和发布边界",
+          "ai_steps": [
+            "输入与风险守卫",
+            "知识检索与引用绑定",
+            "AIGC 生成与证据审计",
+            "纠错重写与人工复核"
+          ],
+          "output": "带引用和免责声明的待审核讲解稿，保留模型原始输出与终审稿",
+          "review": {
+            "record_id": "HR-ARCH-01",
+            "reviewer": "演示审核人",
+            "decision": "演示通过",
+            "detail": "来源已登记，同意作为界面审核流程演示；模型输出不代替史料和属地确认。",
+            "reviewed_at": "2026-09-26"
+          },
+          "evidence_refs": [
+            "EVAL-01 / 49B9DB34A977C16BB87E",
+            "Qwen2.5-0.5B-Instruct / 56614.72 ms",
+            "初审89 → 终审100",
+            "响应 SHA256 20398E04…97FED",
+            "全链路 SHA256 A8D2E65E…88717"
+          ],
+          "target": {
+            "kind": "aigc",
+            "label": "进入讲解生成",
+            "value": "lie-shishan"
+          },
+          "integrity_sha256": "02B510D163CEDE7AF86D01D71C641775B38744EAD89B296C4A3E91F694242A85"
+        },
+        {
+          "id": "AGENT-01",
+          "group": "business",
+          "type_label": "智能体规划",
+          "title": "遗址采集规划与风险守卫",
+          "site_key": "langyu-caomaoshan",
+          "status": "verified",
+          "status_label": "七阶段留痕",
+          "summary": "把山地遗址采集目标拆成点位、重叠度、备份、三维质检、内容审核和发布步骤，并保留风险门禁。",
+          "input": "任务目标、天气/隐私选项、山地遗址关注点和知识条目",
+          "ai_steps": [
+            "输入风险守卫",
+            "知识检索",
+            "采集规划智能体",
+            "审计与人工复核"
+          ],
+          "output": "采集点位和航拍计划、质量控制点、异常重试与人工接管清单",
+          "review": {
+            "record_id": "HR-ARCH-03",
+            "reviewer": "演示审核人",
+            "decision": "演示通过",
+            "detail": "概念模型和采集计划已登记，同意作为界面与流程演示；现场执行前需属地单位确认。",
+            "reviewed_at": "2026-09-26"
+          },
+          "evidence_refs": [
+            "EVAL-03 / CEB8688DA87072B732EA",
+            "Qwen2.5-0.5B-Instruct / 54238.83 ms",
+            "初审100 → 终审100",
+            "有效引用 KB-01、KB-03、KB-05、KB-07",
+            "全链路 SHA256 B6D425A6…25BF0"
+          ],
+          "target": {
+            "kind": "pipeline",
+            "label": "运行智能体闭环",
+            "value": "langyu-caomaoshan"
+          },
+          "integrity_sha256": "C259DC0AB4621130604C7691EA38ECF8E03C88CE24751B6C770DAE76BD0BA3B6"
+        },
+        {
+          "id": "AGENT-02",
+          "group": "business",
+          "type_label": "智能体审核",
+          "title": "档案质量预审与人工签批",
+          "site_key": "qingxiang-wall",
+          "status": "review",
+          "status_label": "退回修改已留痕",
+          "summary": "知识检索和证据审计先检查来源、版权、尺度与风险，再由人工决定通过、退回修改或不通过。",
+          "input": "档案标题、摘要、资料来源、创建人和关联遗址",
+          "ai_steps": [
+            "知识条目匹配",
+            "来源与版权风险检查",
+            "边界和缺项审计",
+            "人工签批与状态留痕"
+          ],
+          "output": "待审核档案、初审意见、退回清单和 SQLite 复核记录",
+          "review": {
+            "record_id": "HR-ARCH-02",
+            "reviewer": "演示审核人",
+            "decision": "退回修改",
+            "detail": "请补充现场来源、拍摄时间和病害位置，再提交复核；该记录已保留审核状态。",
+            "reviewed_at": "2026-09-26"
+          },
+          "evidence_refs": [
+            "档案审核接口 /api/archives/{id}/reviews",
+            "人工结论：退回修改",
+            "SQLite reviews 表留痕",
+            "KB-06 图文资料版权"
+          ],
+          "target": {
+            "kind": "archive",
+            "label": "进入档案审核",
+            "value": "qingxiang-wall"
+          },
+          "integrity_sha256": "7B3CC9A29A497597D82C7AC956D45B07AA7A1D7D177792432BFDAFF3ED795AF6"
+        }
+      ]
+    }
+  },
+  "archives": {
+    "ok": true,
+    "data": [
+      {
+        "id": 3,
+        "site_key": "langyu-caomaoshan",
+        "title": "【演示样例】狼峪草帽山采集计划复核记录",
+        "summary": "登记概念模型、采集点位、模型质检和人工接管事项，用于演示 AIGC/智能体业务案例的复核留痕。",
+        "source": "参赛演示样例，非真实测绘或史料结论",
+        "review_status": "approved",
+        "created_by": "演示采集员",
+        "created_at": "2026-09-26T08:42:46+00:00",
+        "updated_at": "2026-09-26T08:42:46+00:00",
+        "site_name": "狼峪草帽山遗址",
+        "review_status_label": "审核通过",
+        "reviews": [
+          {
+            "id": 3,
+            "archive_id": 3,
+            "decision": "approved",
+            "reviewer": "演示审核人",
+            "comment": "概念模型和采集计划已登记，同意作为界面与流程演示。",
+            "created_at": "2026-09-26T08:42:46+00:00"
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "site_key": "qingxiang-wall",
+        "title": "【演示样例】标语墙病害补充记录",
+        "summary": "记录墙面病害观察和待核验事项，用于演示退回修改与状态留痕；现场位置、尺度和史实尚待确认。",
+        "source": "参赛演示样例，非真实史料结论",
+        "review_status": "changes_requested",
+        "created_by": "演示采集员",
+        "created_at": "2026-09-26T08:42:46+00:00",
+        "updated_at": "2026-09-26T08:42:46+00:00",
+        "site_name": "勍香镇红色标语墙遗址",
+        "review_status_label": "退回修改",
+        "reviews": [
+          {
+            "id": 2,
+            "archive_id": 2,
+            "decision": "changes_requested",
+            "reviewer": "演示审核人",
+            "comment": "请补充现场来源、拍摄时间和病害位置，再提交复核。",
+            "created_at": "2026-09-26T08:42:46+00:00"
+          }
+        ]
+      },
+      {
+        "id": 1,
+        "site_key": "lie-shishan",
+        "title": "【演示样例】烈石山现场影像复核记录",
+        "summary": "记录整体环境、结构边界和补采照片的来源，用于演示新建档案与审核留痕；不作为历史事实或测绘结论。",
+        "source": "参赛演示样例，非真实史料结论",
+        "review_status": "approved",
+        "created_by": "演示采集员",
+        "created_at": "2026-09-26T08:42:46+00:00",
+        "updated_at": "2026-09-26T08:42:46+00:00",
+        "site_name": "烈石山工事遗址",
+        "review_status_label": "审核通过",
+        "reviews": [
+          {
+            "id": 1,
+            "archive_id": 1,
+            "decision": "approved",
+            "reviewer": "演示审核人",
+            "comment": "来源已登记，同意作为界面审核流程演示。",
+            "created_at": "2026-09-26T08:42:46+00:00"
+          }
+        ]
+      }
+    ]
+  },
+  "plan": {
+    "ok": true,
+    "data": {
+      "site_key": "lie-shishan",
+      "summary": "烈石山工事遗址任务已拆分。目标：完成遗址采集建档与成果审核",
+      "mode": "rules",
+      "steps": [
+        {
+          "role": "采集策划智能体",
+          "detail": "结合天气、日照和地形条件选定采集窗口；围绕战壕走向、构筑边界、地形高差和遗存完整性生成点位、角度、重叠度和备份要求。"
+        },
+        {
+          "role": "多模态质量评估",
+          "detail": "在浏览器侧预检分辨率、曝光、对比度和清晰度，标记不合格照片并给出补采建议。"
+        },
+        {
+          "role": "三维重建工单",
+          "detail": "将合格影像登记为重建任务，记录算法、参数、耗时、模型体积、三角面数和异常日志。当前案例模型为概念演示模型。"
+        },
+        {
+          "role": "知识检索",
+          "detail": "从已审核档案条目中检索遗址记录、采集规范、版权约束和历史资料索引。"
+        },
+        {
+          "role": "AIGC讲解生成",
+          "detail": "生成讲解与摘要初稿，附资料来源；人物、时间、地点必须人工核验。"
+        },
+        {
+          "role": "人工审核关卡",
+          "detail": "对人物、车辆、门牌和敏感位置执行脱敏复核；历史内容由史料专家、属地管理人员和项目负责人依次确认。"
+        },
+        {
+          "role": "成果发布与追踪",
+          "detail": "生成模型页面、访问二维码和版本编号，记录发布时间、审核人、反馈和修订历史。"
+        }
+      ],
+      "generated_at": "2026-09-26T08:42:59+00:00"
+    }
+  },
+  "knowledge": {
+    "ok": true,
+    "data": {
+      "query": "三维重建 资料来源",
+      "entries": [
+        {
+          "id": "KB-03",
+          "title": "三维重建质量控制",
+          "text": "重建前检查照片清晰度、重叠度和覆盖完整性；重建后检查模型孔洞、纹理错位、尺度异常和低置信区域，并保留处理日志。",
+          "citation": "[KB-03]",
+          "score": 32,
+          "matched_terms": [
+            "三维重建",
+            "三维",
+            "维重",
+            "重建"
+          ]
+        },
+        {
+          "id": "KB-07",
+          "title": "二维码展示页",
+          "text": "二维码页面应包含遗址名称、模型浏览入口、讲解文本、资料来源、审核日期和纠错反馈入口，并支持移动端访问。",
+          "citation": "[KB-07]",
+          "score": 12,
+          "matched_terms": [
+            "资料来源",
+            "资料",
+            "料来",
+            "来源"
+          ]
+        },
+        {
+          "id": "KB-06",
+          "title": "图文资料版权",
+          "text": "照片、扫描件、地图、手稿和口述材料应记录作者或提供者、授权范围、使用期限和数字化时间。未授权材料不得公开发布。",
+          "citation": "[KB-06]",
+          "score": 8,
+          "matched_terms": [
+            "资料"
+          ]
+        },
+        {
+          "id": "KB-01",
+          "title": "遗址基础档案",
+          "text": "基础档案建议记录遗址名称、级别、年代、位置、权属、保护范围、保存现状、历史沿革、采集人员和审核记录，并为每条资料保留来源。",
+          "citation": "[KB-01]",
+          "score": 6,
+          "matched_terms": [
+            "资料",
+            "来源"
+          ]
+        }
+      ],
+      "retrieval_mode": "keyword",
+      "generated_at": "2026-09-26T08:42:59+00:00"
+    }
+  },
+  "agent": {
+    "ok": true,
+    "data": {
+      "run_id": "D2D9724D7334F41DACEF",
+      "site_key": "lie-shishan",
+      "goal": "形成遗址保护采集与建档闭环",
+      "query": "红色遗址 三维重建",
+      "generation": {
+        "mode": "offline_template",
+        "provider": "offline",
+        "model": "template_v2",
+        "request_id": "11DA921A0B88D2CAF11D",
+        "prompt_sha256": "7B448A0C4B8189B7F9603F4118C02D4364C38538C02C0366D5CAAA1956CDBE9C",
+        "response": "【待审核初稿】烈石山工事遗址数字化保护记录\n\n烈石山工事遗址属于工事遗址。本记录围绕战壕走向、构筑边界、地形高差和遗存完整性组织采集、质检、建模和发布任务，并保留影像、参数、模型指标与审核日志。当前三维资产为概念演示模型，依据影像资料进行解释性建模，非摄影测量成果，不可用于测绘量测。\n\n平台采用多智能体闭环：输入守卫负责边界检查，检索智能体绑定知识来源，规划智能体拆解业务步骤，生成智能体输出受控初稿，审计智能体复核引用与风险，最后进入人工审核。\n\n知识引用：[KB-03]、[KB-01]、[KB-04]。\n\n待审核事项：\n1. 由属地管理单位确认遗址名称、位置、保护范围和现场资料。\n2. 由史料专家核验人物、时间、地点、事件及图文版权。\n\n离线降级原因：服务端未配置大模型",
+        "response_sha256": "81119E029DC2562FDA1CD9B042F24D064A95F39B292D1DF70CF3F7D633424CFC",
+        "candidate_content": "【待审核初稿】烈石山工事遗址数字化保护记录\n\n烈石山工事遗址属于工事遗址。本记录围绕战壕走向、构筑边界、地形高差和遗存完整性组织采集、质检、建模和发布任务，并保留影像、参数、模型指标与审核日志。当前三维资产为概念演示模型，依据影像资料进行解释性建模，非摄影测量成果，不可用于测绘量测。\n\n平台采用多智能体闭环：输入守卫负责边界检查，检索智能体绑定知识来源，规划智能体拆解业务步骤，生成智能体输出受控初稿，审计智能体复核引用与风险，最后进入人工审核。\n\n知识引用：[KB-03]、[KB-01]、[KB-04]。\n\n待审核事项：\n1. 由属地管理单位确认遗址名称、位置、保护范围和现场资料。\n2. 由史料专家核验人物、时间、地点、事件及图文版权。\n\n离线降级原因：服务端未配置大模型",
+        "candidate_sha256": "81119E029DC2562FDA1CD9B042F24D064A95F39B292D1DF70CF3F7D633424CFC",
+        "final_content": "【待审核初稿】烈石山工事遗址数字化保护记录\n\n烈石山工事遗址属于工事遗址。本记录围绕战壕走向、构筑边界、地形高差和遗存完整性组织采集、质检、建模和发布任务，并保留影像、参数、模型指标与审核日志。当前三维资产为概念演示模型，依据影像资料进行解释性建模，非摄影测量成果，不可用于测绘量测。\n\n平台采用多智能体闭环：输入守卫负责边界检查，检索智能体绑定知识来源，规划智能体拆解业务步骤，生成智能体输出受控初稿，审计智能体复核引用与风险，最后进入人工审核。\n\n知识引用：[KB-03]、[KB-01]、[KB-04]。\n\n待审核事项：\n1. 由属地管理单位确认遗址名称、位置、保护范围和现场资料。\n2. 由史料专家核验人物、时间、地点、事件及图文版权。\n\n离线降级原因：服务端未配置大模型",
+        "final_sha256": "81119E029DC2562FDA1CD9B042F24D064A95F39B292D1DF70CF3F7D633424CFC",
+        "latency_ms": 0.02,
+        "fallback_reason": "服务端未配置大模型",
+        "disclosure": "本次为离线模板降级结果，不能作为真实模型输出证据。"
+      },
+      "initial_audit": {
+        "status": "pass",
+        "score": 100,
+        "checks": [
+          {
+            "id": "repetition_control",
+            "label": "重复生成控制",
+            "passed": true,
+            "detail": "重复句占比 0.0%，最高重复 1 次"
+          },
+          {
+            "id": "unsupported_history_control",
+            "label": "无依据历史表述",
+            "passed": true,
+            "detail": "未发现知识条目之外的战争或人物史实"
+          },
+          {
+            "id": "citation_coverage",
+            "label": "引用覆盖",
+            "passed": true,
+            "detail": "识别到有效引用：KB-01、KB-03、KB-04"
+          },
+          {
+            "id": "citation_integrity",
+            "label": "引用完整性",
+            "passed": true,
+            "detail": "无悬空引用"
+          },
+          {
+            "id": "review_marker",
+            "label": "待审核标记",
+            "passed": true,
+            "detail": "已要求进入人工审核"
+          },
+          {
+            "id": "concept_disclaimer",
+            "label": "模型边界披露",
+            "passed": true,
+            "detail": "已披露概念模型和量测边界"
+          },
+          {
+            "id": "length_control",
+            "label": "内容长度",
+            "passed": true,
+            "detail": "当前340字"
+          },
+          {
+            "id": "external_link_control",
+            "label": "外部链接控制",
+            "passed": true,
+            "detail": "未输出未经授权外链"
+          },
+          {
+            "id": "prompt_injection_control",
+            "label": "提示注入复核",
+            "passed": true,
+            "detail": "未发现绕过或泄密模式"
+          }
+        ],
+        "risk_flags": [
+          {
+            "type": "template_fallback",
+            "detail": "本次不是在线大模型生成，不能作为真实模型输出证据。"
+          }
+        ],
+        "valid_citations": [
+          "KB-01",
+          "KB-03",
+          "KB-04"
+        ],
+        "requires_human_review": true,
+        "review_policy": "即使审计通过也必须由人工确认，AI不能替代史料和属地审核。"
+      },
+      "correction": {
+        "applied": false,
+        "reason": "初稿通过证据审计，无需纠错重写。",
+        "final_audit": {
+          "status": "pass",
+          "score": 100,
+          "checks": [
+            {
+              "id": "repetition_control",
+              "label": "重复生成控制",
+              "passed": true,
+              "detail": "重复句占比 0.0%，最高重复 1 次"
+            },
+            {
+              "id": "unsupported_history_control",
+              "label": "无依据历史表述",
+              "passed": true,
+              "detail": "未发现知识条目之外的战争或人物史实"
+            },
+            {
+              "id": "citation_coverage",
+              "label": "引用覆盖",
+              "passed": true,
+              "detail": "识别到有效引用：KB-01、KB-03、KB-04"
+            },
+            {
+              "id": "citation_integrity",
+              "label": "引用完整性",
+              "passed": true,
+              "detail": "无悬空引用"
+            },
+            {
+              "id": "review_marker",
+              "label": "待审核标记",
+              "passed": true,
+              "detail": "已要求进入人工审核"
+            },
+            {
+              "id": "concept_disclaimer",
+              "label": "模型边界披露",
+              "passed": true,
+              "detail": "已披露概念模型和量测边界"
+            },
+            {
+              "id": "length_control",
+              "label": "内容长度",
+              "passed": true,
+              "detail": "当前340字"
+            },
+            {
+              "id": "external_link_control",
+              "label": "外部链接控制",
+              "passed": true,
+              "detail": "未输出未经授权外链"
+            },
+            {
+              "id": "prompt_injection_control",
+              "label": "提示注入复核",
+              "passed": true,
+              "detail": "未发现绕过或泄密模式"
+            }
+          ],
+          "risk_flags": [
+            {
+              "type": "template_fallback",
+              "detail": "本次不是在线大模型生成，不能作为真实模型输出证据。"
+            }
+          ],
+          "valid_citations": [
+            "KB-01",
+            "KB-03",
+            "KB-04"
+          ],
+          "requires_human_review": true,
+          "review_policy": "即使审计通过也必须由人工确认，AI不能替代史料和属地审核。"
+        },
+        "final_sha256": "81119E029DC2562FDA1CD9B042F24D064A95F39B292D1DF70CF3F7D633424CFC",
+        "final_content": "【待审核初稿】烈石山工事遗址数字化保护记录\n\n烈石山工事遗址属于工事遗址。本记录围绕战壕走向、构筑边界、地形高差和遗存完整性组织采集、质检、建模和发布任务，并保留影像、参数、模型指标与审核日志。当前三维资产为概念演示模型，依据影像资料进行解释性建模，非摄影测量成果，不可用于测绘量测。\n\n平台采用多智能体闭环：输入守卫负责边界检查，检索智能体绑定知识来源，规划智能体拆解业务步骤，生成智能体输出受控初稿，审计智能体复核引用与风险，最后进入人工审核。\n\n知识引用：[KB-03]、[KB-01]、[KB-04]。\n\n待审核事项：\n1. 由属地管理单位确认遗址名称、位置、保护范围和现场资料。\n2. 由史料专家核验人物、时间、地点、事件及图文版权。\n\n离线降级原因：服务端未配置大模型"
+      },
+      "audit": {
+        "status": "pass",
+        "score": 100,
+        "checks": [
+          {
+            "id": "repetition_control",
+            "label": "重复生成控制",
+            "passed": true,
+            "detail": "重复句占比 0.0%，最高重复 1 次"
+          },
+          {
+            "id": "unsupported_history_control",
+            "label": "无依据历史表述",
+            "passed": true,
+            "detail": "未发现知识条目之外的战争或人物史实"
+          },
+          {
+            "id": "citation_coverage",
+            "label": "引用覆盖",
+            "passed": true,
+            "detail": "识别到有效引用：KB-01、KB-03、KB-04"
+          },
+          {
+            "id": "citation_integrity",
+            "label": "引用完整性",
+            "passed": true,
+            "detail": "无悬空引用"
+          },
+          {
+            "id": "review_marker",
+            "label": "待审核标记",
+            "passed": true,
+            "detail": "已要求进入人工审核"
+          },
+          {
+            "id": "concept_disclaimer",
+            "label": "模型边界披露",
+            "passed": true,
+            "detail": "已披露概念模型和量测边界"
+          },
+          {
+            "id": "length_control",
+            "label": "内容长度",
+            "passed": true,
+            "detail": "当前340字"
+          },
+          {
+            "id": "external_link_control",
+            "label": "外部链接控制",
+            "passed": true,
+            "detail": "未输出未经授权外链"
+          },
+          {
+            "id": "prompt_injection_control",
+            "label": "提示注入复核",
+            "passed": true,
+            "detail": "未发现绕过或泄密模式"
+          }
+        ],
+        "risk_flags": [
+          {
+            "type": "template_fallback",
+            "detail": "本次不是在线大模型生成，不能作为真实模型输出证据。"
+          }
+        ],
+        "valid_citations": [
+          "KB-01",
+          "KB-03",
+          "KB-04"
+        ],
+        "requires_human_review": true,
+        "review_policy": "即使审计通过也必须由人工确认，AI不能替代史料和属地审核。"
+      },
+      "stages": [
+        {
+          "agent_id": "intake_guard",
+          "name": "输入与风险守卫",
+          "role": "Guard Agent",
+          "capability": "输入长度、提示注入、敏感指令和任务边界检查",
+          "status": "completed",
+          "artifact": {
+            "passed": true,
+            "length_ok": true,
+            "prompt_injection_detected": false,
+            "matches": [],
+            "goal_length": 13,
+            "query_length": 9,
+            "policy": "不执行绕过、泄露或越权指令，只处理红色遗址保护业务问题。"
+          },
+          "started_at": "2026-09-26T08:42:59+00:00",
+          "latency_ms": 0.0,
+          "evidence": {},
+          "artifact_sha256": "83AA2643B68D938265556B528202CF7841105834E4A602321991234F44E6BAE4"
+        },
+        {
+          "agent_id": "retrieval_agent",
+          "name": "知识检索智能体",
+          "role": "Retriever Agent",
+          "capability": "知识条目召回、相关性排序、引用编号和来源绑定",
+          "status": "completed",
+          "artifact": {
+            "query": "红色遗址 三维重建",
+            "retrieval_mode": "keyword_citation_binding",
+            "entries": [
+              {
+                "id": "KB-03",
+                "title": "三维重建质量控制",
+                "text": "重建前检查照片清晰度、重叠度和覆盖完整性；重建后检查模型孔洞、纹理错位、尺度异常和低置信区域，并保留处理日志。",
+                "citation": "[KB-03]",
+                "score": 32,
+                "matched_terms": [
+                  "三维重建",
+                  "三维",
+                  "维重",
+                  "重建"
+                ]
+              },
+              {
+                "id": "KB-01",
+                "title": "遗址基础档案",
+                "text": "基础档案建议记录遗址名称、级别、年代、位置、权属、保护范围、保存现状、历史沿革、采集人员和审核记录，并为每条资料保留来源。",
+                "citation": "[KB-01]",
+                "score": 8,
+                "matched_terms": [
+                  "遗址"
+                ]
+              },
+              {
+                "id": "KB-04",
+                "title": "红色故事编写规则",
+                "text": "红色故事应依据权威史料编写，人物、时间、地点和事件必须可核验。生成式内容只能作为初稿，不得替代专家审核和属地确认。",
+                "citation": "[KB-04]",
+                "score": 8,
+                "matched_terms": [
+                  "红色"
+                ]
+              },
+              {
+                "id": "KB-07",
+                "title": "二维码展示页",
+                "text": "二维码页面应包含遗址名称、模型浏览入口、讲解文本、资料来源、审核日期和纠错反馈入口，并支持移动端访问。",
+                "citation": "[KB-07]",
+                "score": 3,
+                "matched_terms": [
+                  "遗址"
+                ]
+              }
+            ]
+          },
+          "started_at": "2026-09-26T08:42:59+00:00",
+          "latency_ms": 0.06,
+          "evidence": {
+            "citation_count": 4
+          },
+          "artifact_sha256": "90433BA89A45BA7FC317A542B3FA9D742B260DCF6AEF551AC7FD38903381CFBB"
+        },
+        {
+          "agent_id": "planner_agent",
+          "name": "采集规划智能体",
+          "role": "Planner Agent",
+          "capability": "按遗址类型生成采集、质检、建模、审核和发布步骤",
+          "status": "completed",
+          "artifact": {
+            "site_key": "lie-shishan",
+            "summary": "烈石山工事遗址任务已拆分。目标：形成遗址保护采集与建档闭环",
+            "mode": "rules",
+            "steps": [
+              {
+                "role": "采集策划智能体",
+                "detail": "结合天气、日照和地形条件选定采集窗口；围绕战壕走向、构筑边界、地形高差和遗存完整性生成点位、角度、重叠度和备份要求。"
+              },
+              {
+                "role": "多模态质量评估",
+                "detail": "在浏览器侧预检分辨率、曝光、对比度和清晰度，标记不合格照片并给出补采建议。"
+              },
+              {
+                "role": "三维重建工单",
+                "detail": "将合格影像登记为重建任务，记录算法、参数、耗时、模型体积、三角面数和异常日志。当前案例模型为概念演示模型。"
+              },
+              {
+                "role": "知识检索",
+                "detail": "从已审核档案条目中检索遗址记录、采集规范、版权约束和历史资料索引。"
+              },
+              {
+                "role": "AIGC讲解生成",
+                "detail": "生成讲解与摘要初稿，附资料来源；人物、时间、地点必须人工核验。"
+              },
+              {
+                "role": "人工审核关卡",
+                "detail": "对人物、车辆、门牌和敏感位置执行脱敏复核；历史内容由史料专家、属地管理人员和项目负责人依次确认。"
+              },
+              {
+                "role": "成果发布与追踪",
+                "detail": "生成模型页面、访问二维码和版本编号，记录发布时间、审核人、反馈和修订历史。"
+              }
+            ],
+            "generated_at": "2026-09-26T08:42:59+00:00"
+          },
+          "started_at": "2026-09-26T08:42:59+00:00",
+          "latency_ms": 0.01,
+          "evidence": {
+            "step_count": 7
+          },
+          "artifact_sha256": "A62840AA29690CC0C12BB2D26A4437717BACF30F8F10668459C411D80B89911D"
+        },
+        {
+          "agent_id": "generation_agent",
+          "name": "AIGC讲解智能体",
+          "role": "Writer Agent",
+          "capability": "受控检索增强生成，未配置模型时明确降级为模板",
+          "status": "fallback",
+          "artifact": {
+            "mode": "offline_template",
+            "provider": "offline",
+            "model": "template_v2",
+            "request_id": "11DA921A0B88D2CAF11D",
+            "prompt_sha256": "7B448A0C4B8189B7F9603F4118C02D4364C38538C02C0366D5CAAA1956CDBE9C",
+            "response": "【待审核初稿】烈石山工事遗址数字化保护记录\n\n烈石山工事遗址属于工事遗址。本记录围绕战壕走向、构筑边界、地形高差和遗存完整性组织采集、质检、建模和发布任务，并保留影像、参数、模型指标与审核日志。当前三维资产为概念演示模型，依据影像资料进行解释性建模，非摄影测量成果，不可用于测绘量测。\n\n平台采用多智能体闭环：输入守卫负责边界检查，检索智能体绑定知识来源，规划智能体拆解业务步骤，生成智能体输出受控初稿，审计智能体复核引用与风险，最后进入人工审核。\n\n知识引用：[KB-03]、[KB-01]、[KB-04]。\n\n待审核事项：\n1. 由属地管理单位确认遗址名称、位置、保护范围和现场资料。\n2. 由史料专家核验人物、时间、地点、事件及图文版权。\n\n离线降级原因：服务端未配置大模型",
+            "response_sha256": "81119E029DC2562FDA1CD9B042F24D064A95F39B292D1DF70CF3F7D633424CFC",
+            "candidate_content": "【待审核初稿】烈石山工事遗址数字化保护记录\n\n烈石山工事遗址属于工事遗址。本记录围绕战壕走向、构筑边界、地形高差和遗存完整性组织采集、质检、建模和发布任务，并保留影像、参数、模型指标与审核日志。当前三维资产为概念演示模型，依据影像资料进行解释性建模，非摄影测量成果，不可用于测绘量测。\n\n平台采用多智能体闭环：输入守卫负责边界检查，检索智能体绑定知识来源，规划智能体拆解业务步骤，生成智能体输出受控初稿，审计智能体复核引用与风险，最后进入人工审核。\n\n知识引用：[KB-03]、[KB-01]、[KB-04]。\n\n待审核事项：\n1. 由属地管理单位确认遗址名称、位置、保护范围和现场资料。\n2. 由史料专家核验人物、时间、地点、事件及图文版权。\n\n离线降级原因：服务端未配置大模型",
+            "candidate_sha256": "81119E029DC2562FDA1CD9B042F24D064A95F39B292D1DF70CF3F7D633424CFC",
+            "final_content": "【待审核初稿】烈石山工事遗址数字化保护记录\n\n烈石山工事遗址属于工事遗址。本记录围绕战壕走向、构筑边界、地形高差和遗存完整性组织采集、质检、建模和发布任务，并保留影像、参数、模型指标与审核日志。当前三维资产为概念演示模型，依据影像资料进行解释性建模，非摄影测量成果，不可用于测绘量测。\n\n平台采用多智能体闭环：输入守卫负责边界检查，检索智能体绑定知识来源，规划智能体拆解业务步骤，生成智能体输出受控初稿，审计智能体复核引用与风险，最后进入人工审核。\n\n知识引用：[KB-03]、[KB-01]、[KB-04]。\n\n待审核事项：\n1. 由属地管理单位确认遗址名称、位置、保护范围和现场资料。\n2. 由史料专家核验人物、时间、地点、事件及图文版权。\n\n离线降级原因：服务端未配置大模型",
+            "final_sha256": "81119E029DC2562FDA1CD9B042F24D064A95F39B292D1DF70CF3F7D633424CFC",
+            "latency_ms": 0.02,
+            "fallback_reason": "服务端未配置大模型",
+            "disclosure": "本次为离线模板降级结果，不能作为真实模型输出证据。"
+          },
+          "started_at": "2026-09-26T08:42:59+00:00",
+          "latency_ms": 0.02,
+          "evidence": {
+            "request_id": "11DA921A0B88D2CAF11D",
+            "response_sha256": "81119E029DC2562FDA1CD9B042F24D064A95F39B292D1DF70CF3F7D633424CFC",
+            "final_sha256": "81119E029DC2562FDA1CD9B042F24D064A95F39B292D1DF70CF3F7D633424CFC",
+            "mode": "offline_template"
+          },
+          "artifact_sha256": "7321AF4F77C2D5519B59AA472A3E7204D5D510F2D60C800EAAF1868E6F3484C7"
+        },
+        {
+          "agent_id": "audit_agent",
+          "name": "证据审计智能体",
+          "role": "Auditor Agent",
+          "capability": "引用覆盖、事实风险、免责声明、长度和提示注入复核",
+          "status": "pass",
+          "artifact": {
+            "status": "pass",
+            "score": 100,
+            "checks": [
+              {
+                "id": "repetition_control",
+                "label": "重复生成控制",
+                "passed": true,
+                "detail": "重复句占比 0.0%，最高重复 1 次"
+              },
+              {
+                "id": "unsupported_history_control",
+                "label": "无依据历史表述",
+                "passed": true,
+                "detail": "未发现知识条目之外的战争或人物史实"
+              },
+              {
+                "id": "citation_coverage",
+                "label": "引用覆盖",
+                "passed": true,
+                "detail": "识别到有效引用：KB-01、KB-03、KB-04"
+              },
+              {
+                "id": "citation_integrity",
+                "label": "引用完整性",
+                "passed": true,
+                "detail": "无悬空引用"
+              },
+              {
+                "id": "review_marker",
+                "label": "待审核标记",
+                "passed": true,
+                "detail": "已要求进入人工审核"
+              },
+              {
+                "id": "concept_disclaimer",
+                "label": "模型边界披露",
+                "passed": true,
+                "detail": "已披露概念模型和量测边界"
+              },
+              {
+                "id": "length_control",
+                "label": "内容长度",
+                "passed": true,
+                "detail": "当前340字"
+              },
+              {
+                "id": "external_link_control",
+                "label": "外部链接控制",
+                "passed": true,
+                "detail": "未输出未经授权外链"
+              },
+              {
+                "id": "prompt_injection_control",
+                "label": "提示注入复核",
+                "passed": true,
+                "detail": "未发现绕过或泄密模式"
+              }
+            ],
+            "risk_flags": [
+              {
+                "type": "template_fallback",
+                "detail": "本次不是在线大模型生成，不能作为真实模型输出证据。"
+              }
+            ],
+            "valid_citations": [
+              "KB-01",
+              "KB-03",
+              "KB-04"
+            ],
+            "requires_human_review": true,
+            "review_policy": "即使审计通过也必须由人工确认，AI不能替代史料和属地审核。"
+          },
+          "started_at": "2026-09-26T08:42:59+00:00",
+          "latency_ms": 0.0,
+          "evidence": {
+            "audit_score": 100,
+            "valid_citations": [
+              "KB-01",
+              "KB-03",
+              "KB-04"
+            ]
+          },
+          "artifact_sha256": "A38310149EC86464BA158D3EF4A543F9D55A02C764F415FABA894E6DAC33EEE9"
+        },
+        {
+          "agent_id": "correction_agent",
+          "name": "纠错重写智能体",
+          "role": "Repair Agent",
+          "capability": "拦截无依据历史表述，生成引用完整的安全初稿并二次审计",
+          "status": "completed",
+          "artifact": {
+            "applied": false,
+            "reason": "初稿通过证据审计，无需纠错重写。",
+            "final_audit": {
+              "status": "pass",
+              "score": 100,
+              "checks": [
+                {
+                  "id": "repetition_control",
+                  "label": "重复生成控制",
+                  "passed": true,
+                  "detail": "重复句占比 0.0%，最高重复 1 次"
+                },
+                {
+                  "id": "unsupported_history_control",
+                  "label": "无依据历史表述",
+                  "passed": true,
+                  "detail": "未发现知识条目之外的战争或人物史实"
+                },
+                {
+                  "id": "citation_coverage",
+                  "label": "引用覆盖",
+                  "passed": true,
+                  "detail": "识别到有效引用：KB-01、KB-03、KB-04"
+                },
+                {
+                  "id": "citation_integrity",
+                  "label": "引用完整性",
+                  "passed": true,
+                  "detail": "无悬空引用"
+                },
+                {
+                  "id": "review_marker",
+                  "label": "待审核标记",
+                  "passed": true,
+                  "detail": "已要求进入人工审核"
+                },
+                {
+                  "id": "concept_disclaimer",
+                  "label": "模型边界披露",
+                  "passed": true,
+                  "detail": "已披露概念模型和量测边界"
+                },
+                {
+                  "id": "length_control",
+                  "label": "内容长度",
+                  "passed": true,
+                  "detail": "当前340字"
+                },
+                {
+                  "id": "external_link_control",
+                  "label": "外部链接控制",
+                  "passed": true,
+                  "detail": "未输出未经授权外链"
+                },
+                {
+                  "id": "prompt_injection_control",
+                  "label": "提示注入复核",
+                  "passed": true,
+                  "detail": "未发现绕过或泄密模式"
+                }
+              ],
+              "risk_flags": [
+                {
+                  "type": "template_fallback",
+                  "detail": "本次不是在线大模型生成，不能作为真实模型输出证据。"
+                }
+              ],
+              "valid_citations": [
+                "KB-01",
+                "KB-03",
+                "KB-04"
+              ],
+              "requires_human_review": true,
+              "review_policy": "即使审计通过也必须由人工确认，AI不能替代史料和属地审核。"
+            },
+            "final_sha256": "81119E029DC2562FDA1CD9B042F24D064A95F39B292D1DF70CF3F7D633424CFC",
+            "final_content": "【待审核初稿】烈石山工事遗址数字化保护记录\n\n烈石山工事遗址属于工事遗址。本记录围绕战壕走向、构筑边界、地形高差和遗存完整性组织采集、质检、建模和发布任务，并保留影像、参数、模型指标与审核日志。当前三维资产为概念演示模型，依据影像资料进行解释性建模，非摄影测量成果，不可用于测绘量测。\n\n平台采用多智能体闭环：输入守卫负责边界检查，检索智能体绑定知识来源，规划智能体拆解业务步骤，生成智能体输出受控初稿，审计智能体复核引用与风险，最后进入人工审核。\n\n知识引用：[KB-03]、[KB-01]、[KB-04]。\n\n待审核事项：\n1. 由属地管理单位确认遗址名称、位置、保护范围和现场资料。\n2. 由史料专家核验人物、时间、地点、事件及图文版权。\n\n离线降级原因：服务端未配置大模型"
+          },
+          "started_at": "2026-09-26T08:42:59+00:00",
+          "latency_ms": 0.0,
+          "evidence": {
+            "correction_applied": false,
+            "final_audit_score": 100
+          },
+          "artifact_sha256": "1461701B8BDAD7603C5E86C9CBFED29A9AAF9EAB673813536B3959C54E5340E7"
+        },
+        {
+          "agent_id": "human_review_gate",
+          "name": "人工复核关卡",
+          "role": "Human-in-the-loop",
+          "capability": "专家、属地管理单位和项目负责人共同确认",
+          "status": "pending",
+          "artifact": {
+            "status": "pending_human_review",
+            "required_roles": [
+              "史料专家",
+              "属地管理单位",
+              "项目负责人"
+            ],
+            "release_blocked": true,
+            "reason": "AI审计通过不等于事实审核通过，发布前必须完成人工签批。"
+          },
+          "started_at": "2026-09-26T08:42:59+00:00",
+          "latency_ms": 0.0,
+          "evidence": {},
+          "artifact_sha256": "0B994AD3E946B77E6B247F4D42269C9414D384B7A2362222F0A88A814F927A50"
+        }
+      ],
+      "generated_at": "2026-09-26T08:42:59+00:00",
+      "pipeline_version": "2.0",
+      "pipeline": {
+        "name": "HeritageMultiAgentWorkflow",
+        "version": "2.0",
+        "agents": [
+          {
+            "id": "intake_guard",
+            "name": "输入与风险守卫",
+            "role": "Guard Agent",
+            "capability": "输入长度、提示注入、敏感指令和任务边界检查",
+            "output": "受控任务单"
+          },
+          {
+            "id": "retrieval_agent",
+            "name": "知识检索智能体",
+            "role": "Retriever Agent",
+            "capability": "知识条目召回、相关性排序、引用编号和来源绑定",
+            "output": "带编号的检索证据包"
+          },
+          {
+            "id": "planner_agent",
+            "name": "采集规划智能体",
+            "role": "Planner Agent",
+            "capability": "按遗址类型生成采集、质检、建模、审核和发布步骤",
+            "output": "结构化任务计划"
+          },
+          {
+            "id": "generation_agent",
+            "name": "AIGC讲解智能体",
+            "role": "Writer Agent",
+            "capability": "受控检索增强生成，未配置模型时明确降级为模板",
+            "output": "带引用和待审核标记的初稿"
+          },
+          {
+            "id": "audit_agent",
+            "name": "证据审计智能体",
+            "role": "Auditor Agent",
+            "capability": "引用覆盖、事实风险、免责声明、长度和提示注入复核",
+            "output": "质量门禁与风险标记"
+          },
+          {
+            "id": "correction_agent",
+            "name": "纠错重写智能体",
+            "role": "Repair Agent",
+            "capability": "拦截无依据历史表述，生成引用完整的安全初稿并二次审计",
+            "output": "纠错后安全初稿"
+          },
+          {
+            "id": "human_review_gate",
+            "name": "人工复核关卡",
+            "role": "Human-in-the-loop",
+            "capability": "专家、属地管理单位和项目负责人共同确认",
+            "output": "待人工审核状态"
+          }
+        ],
+        "safety": {
+          "human_in_the_loop": true,
+          "prompt_injection_guard": true,
+          "citation_binding": true,
+          "online_offline_disclosure": true,
+          "evidence_hash_chain": true
+        }
+      },
+      "status": "pending_human_review",
+      "latency_ms": 0.56,
+      "bundle_sha256": "43A2329E529E56081D2E1E15BCC0201386C6E70A0F689BA7A6ECDECA360D1F17",
+      "evidence_notice": "本运行记录保留模型原始输出，并证明引用绑定、审计、纠错和人工复核状态；待人工审核状态不允许直接发布。"
+    }
+  },
+  "generate": {
+    "ok": true,
+    "data": {
+      "content": "【待审核初稿】烈石山工事遗址数字化保护记录\n\n烈石山工事遗址属于工事遗址。本记录围绕战壕走向、构筑边界、地形高差和遗存完整性组织采集、质检、建模和发布任务，并保留影像、参数、模型指标与审核日志。当前三维资产为概念演示模型，依据影像资料进行解释性建模，非摄影测量成果，不可用于测绘量测。\n\n平台采用多智能体闭环：输入守卫负责边界检查，检索智能体绑定知识来源，规划智能体拆解业务步骤，生成智能体输出受控初稿，审计智能体复核引用与风险，最后进入人工审核。\n\n知识引用：[KB-01]、[KB-07]。\n\n待审核事项：\n1. 由属地管理单位确认遗址名称、位置、保护范围和现场资料。\n2. 由史料专家核验人物、时间、地点、事件及图文版权。",
+      "mode": "offline_template",
+      "model": "",
+      "provider": "openai",
+      "request_id": "ACE6E0F72DF158B491C5",
+      "prompt_sha256": "052BCF740F854BB1F54F0BB4CF93DE5FBFB56EB693A0A9121BDFEE10342E9A20",
+      "latency_ms": 0.09,
+      "disclosure": "未配置大语言模型；当前提供规则智能体规划、关键词检索和明确标注的离线模板初稿，不冒充真实大模型生成。",
+      "warning": "服务端未配置大模型",
+      "fallback_reason": "服务端未配置大模型",
+      "generated_at": "2026-09-26T08:43:00+00:00"
+    }
+  },
+  "selftest": {
+    "ok": true,
+    "data": {
+      "service": "HeritagePlatformAISelfTest",
+      "schema_version": "1.0",
+      "request_id": "7743AA75A241D569C9C0",
+      "status": "not_configured",
+      "verified": false,
+      "provider": "",
+      "model": "",
+      "generated_at": "2026-09-26T08:43:00+00:00",
+      "error": "未配置真实大模型，当前只能使用离线规则与模板",
+      "disclosure": "未配置大语言模型；当前提供规则智能体规划、关键词检索和明确标注的离线模板初稿，不冒充真实大模型生成。"
+    }
+  },
+  "verify": {
+    "ok": true,
+    "data": {
+      "case_id": "SITE-01",
+      "verified": true,
+      "verification_source": "服务端按输入、AI 环节、输出和人工复核字段重算",
+      "expected_sha256": "F8010C94401EA3628042AD6C9DFC8EF31D9D1F542F6820D7276B92E291CE1558",
+      "recomputed_sha256": "F8010C94401EA3628042AD6C9DFC8EF31D9D1F542F6820D7276B92E291CE1558",
+      "recorded_at": "2026-09-26",
+      "disclosure": "核验只证明案例字段未被改动，不把概念模型或模板输出等同于真实测绘、史料结论。"
+    }
+  }
+}
